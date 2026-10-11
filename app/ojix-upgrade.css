@@ -106,10 +106,10 @@ html.ox-lock, html.ox-lock body { overflow: hidden; }
 
 /* letter roll (hover) */
 .ox-roll-wrap { display: inline-flex; }
-.ox-roll { display: inline-flex; height: 1.15em; overflow: hidden; line-height: 1.15em; }
-.ox-roll-char { display: inline-flex; flex-direction: column; white-space: pre; transition: transform .52s var(--ox-ease); transition-delay: calc(var(--i) * 16ms); }
+.ox-roll { display: inline-flex; align-items: flex-start; height: 1.15em; overflow: hidden; line-height: 1.15em; }
+.ox-roll-char { display: inline-flex; flex-direction: column; flex: none; height: 2.3em; white-space: pre; transition: transform .52s var(--ox-ease); transition-delay: calc(var(--i) * 16ms); }
 .ox-roll-char > span { height: 1.15em; flex: none; }
-:is(a, button):hover .ox-roll-char { transform: translateY(-50%); }
+:is(a, button):hover .ox-roll-char { transform: translateY(-1.15em); }
 @media (pointer: coarse), (prefers-reduced-motion: reduce) {
   .ox-roll-char { transition: none; }
   :is(a, button):hover .ox-roll-char { transform: none; }
