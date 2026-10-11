@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, ArrowUpRight, CheckCircle, WarningCircle, Compass, Cpu, ChartLineUp, ShieldCheck } from "@phosphor-icons/react/dist/ssr";
 import { services, methodology } from "@/lib/content";
+import ServiceVisual from "@/components/service-visual";
 
 export function generateStaticParams() {
   return services.map((s) => ({ slug: s.slug }));
@@ -37,7 +38,11 @@ export default async function ServicePage({
           >
             <ArrowLeft size={14} /> Back to Disciplines
           </Link>
-          <div className="max-w-3xl hero-reveal">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          <div className="order-first">
+            <ServiceVisual slug={s.slug} label={s.name} />
+          </div>
+          <div className="hero-reveal">
             <span className="font-mono text-xs font-semibold uppercase tracking-widest text-theme-accent mb-4 block">
               DISCIPLINE · {s.kicker}
             </span>
@@ -72,6 +77,7 @@ export default async function ServicePage({
                 <span className="w-1.5 h-1.5 rounded-full bg-theme-accent" /> DIRECT IN-HOUSE BUILDERS
               </span>
             </div>
+          </div>
           </div>
         </div>
       </section>
