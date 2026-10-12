@@ -8,7 +8,7 @@ export const metadata = {
 
 export default function TermsPage() {
   return (
-    <div className="pt-32 pb-24 md:pt-44 md:pb-32 px-6 bg-theme-bg theme-transition min-h-screen">
+    <div className="pt-6 lg:pt-10 pb-12 lg:pb-16 px-6 bg-theme-bg theme-transition">
       <div className="max-w-4xl mx-auto">
         <Link
           href="/"
@@ -16,7 +16,7 @@ export default function TermsPage() {
         >
           <ArrowLeft size={14} /> Back to Home
         </Link>
-        <div className="mb-12">
+        <div className="mb-8">
           <span className="font-mono text-xs font-semibold uppercase tracking-widest text-theme-accent mb-3 block">
             TERMS & CONDITIONS
           </span>

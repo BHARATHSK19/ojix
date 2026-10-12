@@ -34,7 +34,7 @@ const PRINCIPLES: PrincipleItem[] = [
     id: "engineering",
     step: "01",
     code: "SYS.ENG.01",
-    eyebrow: "PRINCIPLE 01",
+    eyebrow: "PRINCIPLE",
     category: "Engineering quality",
     headline: "Built beyond the demo.",
     description:
@@ -58,7 +58,7 @@ const PRINCIPLES: PrincipleItem[] = [
     id: "collaboration",
     step: "02",
     code: "COL.ENG.02",
-    eyebrow: "PRINCIPLE 02",
+    eyebrow: "PRINCIPLE",
     category: "Direct collaboration",
     headline: "Closer to the people building it.",
     description:
@@ -82,7 +82,7 @@ const PRINCIPLES: PrincipleItem[] = [
     id: "delivery",
     step: "03",
     code: "DEL.ENG.03",
-    eyebrow: "PRINCIPLE 03",
+    eyebrow: "PRINCIPLE",
     category: "Visible delivery",
     headline: "Progress you can see.",
     description:
@@ -275,13 +275,13 @@ export function WhyUsSection() {
     <section
       id="how-we-work"
       aria-label="Why Choose OJIX"
-      className="py-24 md:py-36 px-6 theme-transition border-b border-theme-border bg-theme-bg"
+      className="py-12 lg:py-16 px-6 theme-transition border-b border-theme-border bg-theme-bg"
     >
       <div className="max-w-7xl mx-auto">
         {/* Section Introduction */}
-        <div className="mb-16 md:mb-24 reveal max-w-3xl">
+        <div className="mb-8 lg:mb-10 reveal max-w-3xl">
           <div className="inline-flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-widest text-theme-accent mb-4">
-            <span className="w-1.5 h-1.5 rounded-full bg-theme-accent inline-block" />
+
             <span>WHY CHOOSE OJIX</span>
           </div>
 
@@ -310,7 +310,7 @@ export function WhyUsSection() {
           </div>
 
           {/* Timeline Entries */}
-          <div className="space-y-20 sm:space-y-28 md:space-y-36">
+          <div className="space-y-12 sm:space-y-16 md:space-y-20">
             {PRINCIPLES.map((principle, index) => {
               return (
                 <div

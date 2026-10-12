@@ -60,7 +60,7 @@ export default async function IndustryPage({
   return (
     <>
       {/* Hero Section */}
-      <section className="pt-32 pb-20 md:pt-44 md:pb-28 px-6 bg-theme-bg relative overflow-hidden theme-transition border-b border-theme-border">
+      <section className="pt-6 lg:pt-10 pb-12 lg:pb-16 px-6 bg-theme-bg relative overflow-hidden theme-transition border-b border-theme-border">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-gradient-to-b from-orange-500/5 via-transparent to-transparent pointer-events-none rounded-full blur-3xl -z-10" />
         <div className="max-w-7xl mx-auto">
           <Link
@@ -99,9 +99,9 @@ export default async function IndustryPage({
       </section>
 
       {/* Industry Capabilities — Responsive Cards */}
-      <section className="py-24 md:py-32 px-6 bg-theme-surface/30 theme-transition border-b border-theme-border">
+      <section className="py-12 lg:py-16 px-6 bg-theme-surface/30 theme-transition border-b border-theme-border">
         <div className="max-w-7xl mx-auto">
-          <div className="mb-16 reveal">
+          <div className="mb-8 lg:mb-10 reveal">
             <span className="font-mono text-xs font-semibold uppercase tracking-widest text-theme-accent mb-4 block">
               OPERATING CAPABILITIES
             </span>
@@ -155,9 +155,9 @@ export default async function IndustryPage({
       </section>
 
       {/* Relevant Disciplines Section */}
-      <section className="py-24 md:py-32 px-6 bg-theme-bg theme-transition border-b border-theme-border">
+      <section className="py-12 lg:py-16 px-6 bg-theme-bg theme-transition border-b border-theme-border">
         <div className="max-w-7xl mx-auto">
-          <div className="mb-16 reveal">
+          <div className="mb-8 lg:mb-10 reveal">
             <span className="font-mono text-xs font-semibold uppercase tracking-widest text-theme-accent mb-4 block">
               DISCIPLINES APPLIED
             </span>
@@ -210,9 +210,9 @@ export default async function IndustryPage({
       </section>
 
       {/* Sector Case Study Showcase */}
-      <section className="py-24 md:py-32 px-6 bg-theme-surface/30 theme-transition border-b border-theme-border">
+      <section className="py-12 lg:py-16 px-6 bg-theme-surface/30 theme-transition border-b border-theme-border">
         <div className="max-w-7xl mx-auto">
-          <div className="mb-14 reveal">
+          <div className="mb-8 lg:mb-10 reveal">
             <span className="font-mono text-xs font-semibold uppercase tracking-widest text-theme-accent mb-4 block">
               SECTOR ECOSYSTEM
             </span>

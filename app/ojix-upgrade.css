@@ -382,7 +382,7 @@ html.ox-lock, html.ox-lock body { overflow: hidden; }
 /* =====================================================================
    SECTORS — index + live preview (replaces 8-card grid)
    ===================================================================== */
-.ox-sec-intro { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px 48px; flex-wrap: wrap; margin-bottom: 48px; }
+.ox-sec-intro { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px 48px; flex-wrap: wrap; margin-bottom: 36px; }
 
 .ox-sectors { display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(0, .92fr); gap: clamp(28px, 4vw, 64px); align-items: start; }
 
@@ -609,9 +609,9 @@ html.ox-vt *, html.ox-vt *::before, html.ox-vt *::after { transition: none !impo
 /* =====================================================================
    STUDIO INTRO (BLUNT-style)
    ===================================================================== */
-.ox-intro { padding: clamp(80px, 10vw, 136px) 24px; background: linear-gradient(180deg, var(--bg-color), color-mix(in srgb, var(--hover-color) 55%, var(--bg-color))); border-bottom: 1px solid var(--border-color); }
+.ox-intro { padding: clamp(48px, 6vw, 64px) 24px; background: linear-gradient(180deg, var(--bg-color), color-mix(in srgb, var(--hover-color) 55%, var(--bg-color))); border-bottom: 1px solid var(--border-color); }
 .ox-intro-wrap { max-width: 1200px; margin: 0 auto; }
-.ox-intro-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 32px; flex-wrap: wrap; margin-bottom: clamp(56px, 7vw, 96px); }
+.ox-intro-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 32px; flex-wrap: wrap; margin-bottom: clamp(32px, 4vw, 40px); }
 .ox-intro-top h2 { margin: 0; font: 600 clamp(30px, 3.6vw, 46px)/1.14 var(--font-main), sans-serif; letter-spacing: -.035em; color: var(--text-primary); max-width: 720px; }
 .ox-intro-top h2 span { color: var(--text-secondary); }
 .ox-intro-btn { display: inline-flex; align-items: center; gap: 10px; height: 50px; padding: 0 30px; border-radius: 12px; background: var(--surface-color); border: 1px solid var(--border-color); color: var(--text-primary); font-size: 14px; font-weight: 700; box-shadow: 0 8px 24px -16px rgba(15, 28, 47, .3); transition: all .3s var(--ox-ease); }

@@ -1108,7 +1108,9 @@
 
         .product-card.product-card-expand {
             overflow: hidden;
-            min-height: 520px;
+            min-height: 480px;
+            display: flex;
+            flex-direction: column;
         }
 
         .product-card-inner {
@@ -1121,20 +1123,20 @@
         }
 
         .product-thumbnail-spacer {
-            height: 125px;
+            height: 180px;
             width: 100%;
             margin-top: auto;
-            margin-bottom: 16px;
+            margin-bottom: 18px;
             pointer-events: none;
         }
 
         /* The Expanding Background Image Stage */
         .product-expand-bg {
             position: absolute;
-            left: 26px;
-            right: 26px;
-            bottom: 90px;
-            top: calc(100% - 215px);
+            left: 24px;
+            right: 24px;
+            bottom: 78px;
+            top: calc(100% - 258px);
             border-radius: 14px;
             overflow: hidden;
             z-index: 2;
@@ -1144,7 +1146,7 @@
                         right 0.65s cubic-bezier(0.16, 1, 0.3, 1),
                         border-radius 0.65s cubic-bezier(0.16, 1, 0.3, 1),
                         box-shadow 0.65s cubic-bezier(0.16, 1, 0.3, 1);
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
         }
 
         html[data-theme="dark"] .product-expand-bg {
@@ -1154,19 +1156,23 @@
         .product-expand-img {
             object-fit: cover;
             object-position: center;
-            transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+            filter: none !important;
+            transform: scale(1);
         }
 
         /* Subtle resting scrim */
         .product-expand-scrim {
             position: absolute;
             inset: 0;
-            background: linear-gradient(180deg, rgba(7, 11, 18, 0) 0%, rgba(7, 11, 18, 0.25) 100%);
-            transition: background 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+            background: linear-gradient(180deg, rgba(11, 15, 25, 0) 0%, rgba(11, 15, 25, 0.25) 100%);
+            transition: background 0.6s cubic-bezier(0.16, 1, 0.3, 1);
             pointer-events: none;
+            backdrop-filter: none !important;
+            filter: none !important;
         }
 
-        /* HOVER: Slowly enlarge and expand to show full image covering the card */
+        /* HOVER: Smoothly expand to show sharp full image covering the card with clean dark gradient overlay */
         .product-card.product-card-expand:hover .product-expand-bg {
             top: 0;
             bottom: 0;
@@ -1177,16 +1183,19 @@
         }
 
         .product-card.product-card-expand:hover .product-expand-img {
-            transform: scale(1.06);
+            transform: scale(1.04);
+            filter: none !important;
         }
 
         .product-card.product-card-expand:hover .product-expand-scrim {
             background: linear-gradient(
                 180deg,
-                rgba(7, 11, 18, 0.90) 0%,
-                rgba(7, 11, 18, 0.74) 40%,
-                rgba(7, 11, 18, 0.94) 100%
+                rgba(11, 15, 25, 0.80) 0%,
+                rgba(11, 15, 25, 0.70) 50%,
+                rgba(11, 15, 25, 0.90) 100%
             );
+            backdrop-filter: none !important;
+            filter: none !important;
         }
 
         .product-card:hover {
@@ -1225,9 +1234,11 @@
         }
 
         .product-title {
-            font-size: 26px;
+            font-size: 21px;
             font-weight: 700;
+            line-height: 1.25;
             color: #0f172a;
+            letter-spacing: -0.015em;
             transition: color 0.35s ease;
         }
 
@@ -1259,8 +1270,7 @@
             display: flex;
             flex-wrap: wrap;
             gap: 6px;
-            margin-top: auto;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
 
         .product-pill {

@@ -2,112 +2,77 @@
 
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import {
-  Compass,
-  Cpu,
-  ChartLineUp,
-  CheckCircle,
-  ArrowRight
+  MagnifyingGlass,
+  TreeStructure,
+  MonitorPlay,
+  RocketLaunch
 } from "@phosphor-icons/react";
 
-interface StepData {
-  number: string;
-  stepNum: string;
+interface StepItem {
   title: string;
   description: string;
-  pills: [string, string];
-  footer: string;
   icon: React.ElementType;
-  badge: string;
 }
 
-const STEPS: StepData[] = [
+const STEPS: StepItem[] = [
   {
-    number: "STEP 01",
-    stepNum: "01",
     title: "Workflow & Friction Audit",
     description:
       "We identify workflow bottlenecks, operational challenges, and business goals to establish a clear, practical software blueprint.",
-    pills: ["Discovery", "Blueprint"],
-    footer: "Next: Step 02",
-    icon: Compass,
-    badge: "Discovery"
+    icon: MagnifyingGlass
   },
   {
-    number: "STEP 02",
-    stepNum: "02",
     title: "System Design & Plan",
     description:
-      "We define user experiences, database structures, system architecture, and security permissions before development begins.",
-    pills: ["Architecture", "Plan"],
-    footer: "Next: Step 03",
-    icon: Cpu,
-    badge: "Architecture"
+      "We define user experience, database architecture, and security permissions before development.",
+    icon: TreeStructure
   },
   {
-    number: "STEP 03",
-    stepNum: "03",
     title: "Bi-Weekly Staging Demos",
     description:
       "Review working software in a staging environment every two weeks, track progress, and provide feedback throughout development.",
-    pills: ["Feedback", "Staging"],
-    footer: "Next: Step 04",
-    icon: ChartLineUp,
-    badge: "Staging"
+    icon: MonitorPlay
   },
   {
-    number: "STEP 04",
-    stepNum: "04",
     title: "Launch & 100% Handover",
     description:
       "We deploy your software, verify production readiness, and hand over the codebase, credentials, and essential project documentation.",
-    pills: ["Ownership", "Launch"],
-    footer: "Ready for production",
-    icon: CheckCircle,
-    badge: "Production"
+    icon: RocketLaunch
   }
 ];
 
-// Color palette derived strictly from OJIX design system
-const ARC_COLORS = {
-  default: [
-    "#0f1c2f", // Step 1: Midnight Navy
-    "#1a3354", // Step 2: Deep Slate Navy
-    "#2b4f7a", // Step 3: Steel Indigo
-    "#c9662f"  // Step 4: OJIX Terracotta (Culmination)
-  ],
-  defaultDark: [
-    "#3a5270", // Step 1 Dark
-    "#466284", // Step 2 Dark
-    "#54759d", // Step 3 Dark
-    "#e07238"  // Step 4 Dark: Luminous Orange
-  ],
-  active: "#c9662f",
-  activeDark: "#e07238"
-};
+interface NodePosition {
+  cx: number;
+  cy: number;
+  r: number;
+}
 
 export function DeliveryMethodology() {
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [activeIndex, setActiveIndex] = useState<number>(0);
+  const [isPaused, setIsPaused] = useState(false);
   const [isDark, setIsDark] = useState(false);
+
   const containerRef = useRef<HTMLDivElement>(null);
-  const nodeRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const circleRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-  // Coordinate tracking for dynamic SVG alignment
-  const [geometry, setGeometry] = useState<{
-    width: number;
-    height: number;
-    nodes: { x: number; y: number }[];
-  }>({
-    width: 1200,
-    height: 740,
-    nodes: [
-      { x: 150, y: 370 },
-      { x: 450, y: 370 },
-      { x: 750, y: 370 },
-      { x: 1050, y: 370 }
-    ]
-  });
+  // Default initial positions for SSR / initial mount
+  const [positions, setPositions] = useState<NodePosition[]>([
+    { cx: 125, cy: 155, r: 66 },
+    { cx: 375, cy: 155, r: 66 },
+    { cx: 625, cy: 155, r: 66 },
+    { cx: 875, cy: 155, r: 66 }
+  ]);
 
-  // Track theme changes for SVG stroke colors
+  // Auto-cycle through steps every 3500ms unless paused by hover
+  useEffect(() => {
+    if (isPaused) return;
+    const timer = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % STEPS.length);
+    }, 3500);
+    return () => clearInterval(timer);
+  }, [isPaused]);
+
+  // Synchronize dark/light mode for SVG stroke palette
   useEffect(() => {
     const checkTheme = () => {
       const htmlTheme = document.documentElement.dataset.theme;
@@ -122,32 +87,29 @@ export function DeliveryMethodology() {
     return () => observer.disconnect();
   }, []);
 
-  // Dynamically update geometry from measured DOM nodes
+  // Measure dynamic coordinates of circle nodes
   const updateGeometry = useCallback(() => {
     if (!containerRef.current) return;
     const containerRect = containerRef.current.getBoundingClientRect();
     if (containerRect.width === 0) return;
 
-    const newNodes = STEPS.map((_, i) => {
-      const el = nodeRefs.current[i];
+    const newPositions: NodePosition[] = circleRefs.current.map((el, i) => {
       if (el) {
         const rect = el.getBoundingClientRect();
         return {
-          x: rect.left + rect.width / 2 - containerRect.left,
-          y: rect.top + rect.height / 2 - containerRect.top
+          cx: rect.left + rect.width / 2 - containerRect.left,
+          cy: rect.top + rect.height / 2 - containerRect.top,
+          r: rect.width / 2 + 10 // Arc wraps 10px outside the circle edge
         };
       }
       return {
-        x: containerRect.width * (0.125 + i * 0.25),
-        y: containerRect.height / 2
+        cx: containerRect.width * (0.125 + i * 0.25),
+        cy: 155,
+        r: 66
       };
     });
 
-    setGeometry({
-      width: containerRect.width,
-      height: containerRect.height,
-      nodes: newNodes
-    });
+    setPositions(newPositions);
   }, []);
 
   useEffect(() => {
@@ -165,392 +127,226 @@ export function DeliveryMethodology() {
     };
   }, [updateGeometry]);
 
-  const arcRadius = 52;
+  // Color tokens
+  const defaultStroke = isDark ? "#334155" : "#0f1c2f";
+  const activeStroke = isDark ? "#e07238" : "#C84B15";
 
-  // Generate alternating upper and lower arcs inspired by Reference Image 1
-  // Node 0: lower arc (cradles bottom)
-  // Node 1: upper arc (arches over top)
-  // Node 2: lower arc (cradles bottom)
-  // Node 3: upper arc (arches over top)
-  const getArcPaths = () => {
-    const { nodes } = geometry;
-    const paths: {
-      arc: string;
-      connector?: string;
-      stem?: { x1: number; y1: number; x2: number; y2: number };
-    }[] = [];
+  // Calculate arc and line geometries
+  // Step 0 & 2: Bottom cradle arc (155° down through 90° to 25°)
+  // Step 1 & 3: Top cap arc (205° up through 270° to 335°)
+  const arcs = positions.map((pos, i) => {
+    const isTop = i % 2 === 1;
+    const rad = (deg: number) => (deg * Math.PI) / 180;
 
-    nodes.forEach((n, i) => {
-      const isEven = i % 2 === 0; // 0, 2: lower arc; 1, 3: upper arc
-      let arcPath = "";
-      let arcStart = { x: 0, y: 0 };
-      let arcEnd = { x: 0, y: 0 };
+    if (!isTop) {
+      // Bottom cradle arc (wrapping underneath the circle)
+      const startX = pos.cx + pos.r * Math.cos(rad(155));
+      const startY = pos.cy + pos.r * Math.sin(rad(155));
+      const endX = pos.cx + pos.r * Math.cos(rad(25));
+      const endY = pos.cy + pos.r * Math.sin(rad(25));
+      return {
+        path: `M ${startX} ${startY} A ${pos.r} ${pos.r} 0 0 0 ${endX} ${endY}`,
+        startX,
+        startY,
+        endX,
+        endY
+      };
+    } else {
+      // Top cap arc (wrapping over the top of the circle)
+      const startX = pos.cx + pos.r * Math.cos(rad(205));
+      const startY = pos.cy + pos.r * Math.sin(rad(205));
+      const endX = pos.cx + pos.r * Math.cos(rad(335));
+      const endY = pos.cy + pos.r * Math.sin(rad(335));
+      return {
+        path: `M ${startX} ${startY} A ${pos.r} ${pos.r} 0 0 1 ${endX} ${endY}`,
+        startX,
+        startY,
+        endX,
+        endY
+      };
+    }
+  });
 
-      if (isEven) {
-        // Lower arc: hugs bottom of circle
-        const startRad = Math.PI * (165 / 180);
-        const endRad = Math.PI * (15 / 180);
-        arcStart = {
-          x: n.x + arcRadius * Math.cos(startRad),
-          y: n.y + arcRadius * Math.sin(startRad)
-        };
-        arcEnd = {
-          x: n.x + arcRadius * Math.cos(endRad),
-          y: n.y + arcRadius * Math.sin(endRad)
-        };
-        // sweep-flag = 0 in SVG curves counter-clockwise through bottom
-        arcPath = `M ${arcStart.x} ${arcStart.y} A ${arcRadius} ${arcRadius} 0 0 0 ${arcEnd.x} ${arcEnd.y}`;
-      } else {
-        // Upper arc: hugs top of circle
-        const startRad = Math.PI * (195 / 180);
-        const endRad = Math.PI * (345 / 180);
-        arcStart = {
-          x: n.x + arcRadius * Math.cos(startRad),
-          y: n.y + arcRadius * Math.sin(startRad)
-        };
-        arcEnd = {
-          x: n.x + arcRadius * Math.cos(endRad),
-          y: n.y + arcRadius * Math.sin(endRad)
-        };
-        // sweep-flag = 1 in SVG curves clockwise through top
-        arcPath = `M ${arcStart.x} ${arcStart.y} A ${arcRadius} ${arcRadius} 0 0 1 ${arcEnd.x} ${arcEnd.y}`;
-      }
+  // Diagonal dashed connector lines:
+  // 0 -> 1: Arc 0 (bottom end) to Arc 1 (top start)
+  // 1 -> 2: Arc 1 (top end) to Arc 2 (bottom start)
+  // 2 -> 3: Arc 2 (bottom end) to Arc 3 (top start)
+  const connectors = [
+    {
+      from: 0,
+      to: 1,
+      path: `M ${arcs[0].endX} ${arcs[0].endY} L ${arcs[1].startX} ${arcs[1].startY}`
+    },
+    {
+      from: 1,
+      to: 2,
+      path: `M ${arcs[1].endX} ${arcs[1].endY} L ${arcs[2].startX} ${arcs[2].startY}`
+    },
+    {
+      from: 2,
+      to: 3,
+      path: `M ${arcs[2].endX} ${arcs[2].endY} L ${arcs[3].startX} ${arcs[3].startY}`
+    }
+  ];
 
-      // Connecting S-curve to next node
-      let connectorPath: string | undefined = undefined;
-      if (i < nodes.length - 1) {
-        const nextNode = nodes[i + 1];
-        const nextIsEven = (i + 1) % 2 === 0;
-        const nextStartRad = nextIsEven
-          ? Math.PI * (165 / 180)
-          : Math.PI * (195 / 180);
-        const nextStart = {
-          x: nextNode.x + arcRadius * Math.cos(nextStartRad),
-          y: nextNode.y + arcRadius * Math.sin(nextStartRad)
-        };
-
-        const dx = nextStart.x - arcEnd.x;
-        const dy = nextStart.y - arcEnd.y;
-        // Smooth inflection S-curve
-        const cp1 = { x: arcEnd.x + dx * 0.45, y: arcEnd.y + dy * 0.15 };
-        const cp2 = { x: nextStart.x - dx * 0.45, y: nextStart.y - dy * 0.15 };
-        connectorPath = `M ${arcEnd.x} ${arcEnd.y} C ${cp1.x} ${cp1.y}, ${cp2.x} ${cp2.y}, ${nextStart.x} ${nextStart.y}`;
-      }
-
-      // Vertical guide stem connecting node to card
-      const stem = isEven
-        ? { x1: n.x, y1: n.y + arcRadius + 6, x2: n.x, y2: n.y + 60 }
-        : { x1: n.x, y1: n.y - 60, x2: n.x, y2: n.y - arcRadius - 6 };
-
-      paths.push({
-        arc: arcPath,
-        connector: connectorPath,
-        stem
-      });
-    });
-
-    return paths;
-  };
-
-  const arcData = getArcPaths();
+  // Active connector: 0 -> line 0 (Step 0 to 1), 1 -> line 1 (Step 1 to 2), 2 or 3 -> line 2 (Step 2 to 3)
+  const activeConnIdx = activeIndex === 0 ? 0 : activeIndex === 1 ? 1 : 2;
 
   return (
     <section
-      id="capabilities"
-      className="py-24 md:py-32 px-6 bg-theme-surface/30 border-t border-theme-border theme-transition overflow-hidden"
+      id="process"
+      className="py-10 lg:py-14 px-6 bg-theme-bg theme-transition border-b border-theme-border overflow-hidden"
     >
       <div className="max-w-7xl mx-auto">
-        {/* Section Header */}
-        <div className="mb-14 lg:mb-20 reveal">
-          <span className="font-mono text-xs font-semibold uppercase tracking-widest text-theme-accent mb-4 block">
-            04 / Delivery Methodology
+        {/* Section Header with tightened bottom margin */}
+        <div className="mb-4 lg:mb-6 reveal">
+          <span className="font-mono text-xs font-bold uppercase tracking-widest text-theme-accent mb-2.5 block">
+            DELIVERY METHODOLOGY
           </span>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight theme-transition">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-theme-text theme-transition mb-2.5">
             Transparent, milestone-based execution.
           </h2>
-          <p className="mt-4 text-theme-muted max-w-2xl text-base sm:text-lg">
-            We operate with full technical transparency — delivering working
-            code to live staging environments at every sprint checkpoint.
+          <p className="text-sm sm:text-base lg:text-lg text-theme-muted max-w-2xl leading-relaxed">
+            We operate with full technical transparency — delivering working code to live staging environments at every sprint checkpoint.
           </p>
         </div>
 
-        {/* ================================================================= */}
-        {/* DESKTOP LAYOUT: 4-Step Curved Journey Diagram (>= 1024px)        */}
-        {/* ================================================================= */}
-        <div
-          ref={containerRef}
-          className="hidden lg:block relative min-h-[740px] select-none"
-        >
-          {/* Background SVG Layer for Connected Arcs and Wave Transitions */}
-          <svg
-            className="absolute inset-0 w-full h-full pointer-events-none z-0"
-            viewBox={`0 0 ${geometry.width} ${geometry.height}`}
-            fill="none"
-            aria-hidden="true"
-          >
+        {/* Desktop S-Wave Infographic Layout (Visible on lg: screens) */}
+        <div ref={containerRef} className="hidden lg:block relative w-full select-none">
+          {/* SVG Overlay: Thick Arcs & Diagonal Dashed Connecting Lines */}
+          <svg className="absolute inset-0 w-full h-full pointer-events-none overflow-visible z-0">
             <defs>
-              <filter id="arc-glow" x="-25%" y="-25%" width="150%" height="150%">
-                <feGaussianBlur stdDeviation="6" result="blur" />
-                <feMerge>
-                  <feMergeNode in="blur" />
-                  <feMergeNode in="SourceGraphic" />
-                </feMerge>
+              <filter id="wave-orange-glow" x="-30%" y="-30%" width="160%" height="160%">
+                <feDropShadow dx="0" dy="0" stdDeviation="5" floodColor="#C84B15" floodOpacity="0.55" />
               </filter>
             </defs>
 
-            {/* Connecting S-Curve Tracks Between Consecutive Steps */}
-            {arcData.map((d, i) => {
-              if (!d.connector) return null;
-              const isConnectorActive =
-                hoveredIndex === i || hoveredIndex === i + 1;
-              const strokeColor = isConnectorActive
-                ? isDark
-                  ? ARC_COLORS.activeDark
-                  : ARC_COLORS.active
-                : isDark
-                ? "rgba(165, 176, 194, 0.22)"
-                : "rgba(15, 28, 47, 0.2)";
-
+            {/* 3 Diagonal Dashed Connector Lines */}
+            {connectors.map((conn, idx) => {
+              const isConnActive = activeConnIdx === idx;
               return (
                 <path
-                  key={`connector-${i}`}
-                  d={d.connector}
-                  stroke={strokeColor}
-                  strokeWidth={isConnectorActive ? 3.5 : 2}
+                  key={`conn-${idx}`}
+                  d={conn.path}
+                  stroke={isConnActive ? activeStroke : defaultStroke}
+                  strokeWidth="3"
+                  strokeDasharray="6 6"
                   strokeLinecap="round"
-                  strokeDasharray={isConnectorActive ? "6 6" : "5 5"}
-                  className="transition-all duration-300"
-                  style={{
-                    animation: isConnectorActive
-                      ? "dashFlow 1.2s linear infinite"
-                      : "none"
-                  }}
+                  fill="none"
+                  className="transition-colors duration-300"
+                  filter={isConnActive ? "url(#wave-orange-glow)" : undefined}
                 />
               );
             })}
 
-            {/* Vertical Guide Stems Linking Cards to Nodes */}
-            {arcData.map((d, i) => {
-              if (!d.stem) return null;
-              const isHovered = hoveredIndex === i;
-              return (
-                <line
-                  key={`stem-${i}`}
-                  x1={d.stem.x1}
-                  y1={d.stem.y1}
-                  x2={d.stem.x2}
-                  y2={d.stem.y2}
-                  stroke={
-                    isHovered
-                      ? isDark
-                        ? ARC_COLORS.activeDark
-                        : ARC_COLORS.active
-                      : isDark
-                      ? "rgba(165, 176, 194, 0.25)"
-                      : "rgba(15, 28, 47, 0.2)"
-                  }
-                  strokeWidth={isHovered ? 2 : 1.5}
-                  strokeDasharray="4 4"
-                  className="transition-all duration-300"
+            {/* Traveling Pulse Dot along Active Connector */}
+            {connectors[activeConnIdx] && (
+              <circle r="4" fill="#C84B15" filter="drop-shadow(0 0 5px #C84B15)">
+                <animateMotion
+                  path={connectors[activeConnIdx].path}
+                  dur="1.6s"
+                  repeatCount="indefinite"
                 />
-              );
-            })}
+              </circle>
+            )}
 
-            {/* Prominent Curved Arc Collars Hugging Each Node */}
-            {arcData.map((d, i) => {
-              const isHovered = hoveredIndex === i;
-              const baseColor = isDark
-                ? ARC_COLORS.defaultDark[i]
-                : ARC_COLORS.default[i];
-              const activeColor = isDark
-                ? ARC_COLORS.activeDark
-                : ARC_COLORS.active;
-              const strokeColor = isHovered ? activeColor : baseColor;
-
+            {/* 4 Thick Semi-Circular Arcs */}
+            {arcs.map((arc, idx) => {
+              const isArcActive = activeIndex === idx;
               return (
                 <path
-                  key={`arc-${i}`}
-                  d={d.arc}
-                  stroke={strokeColor}
-                  strokeWidth={isHovered ? 13 : 10}
+                  key={`arc-${idx}`}
+                  d={arc.path}
+                  stroke={isArcActive ? activeStroke : defaultStroke}
+                  strokeWidth="11"
                   strokeLinecap="round"
-                  filter={isHovered ? "url(#arc-glow)" : undefined}
-                  className="transition-all duration-300 ease-out"
+                  fill="none"
+                  className="transition-colors duration-300"
+                  filter={isArcActive ? "url(#wave-orange-glow)" : undefined}
                 />
               );
             })}
           </svg>
 
-          {/* Interactive Grid: 4 Columns with alternating cards and center nodes */}
-          <div className="relative z-10 grid grid-cols-4 gap-6 items-center min-h-[740px]">
-            {STEPS.map((step, i) => {
+          {/* 4-Column Content Grid */}
+          <div className="grid grid-cols-4 gap-4 lg:gap-8 relative z-10">
+            {STEPS.map((step, idx) => {
+              const isTopArc = idx % 2 === 1;
               const Icon = step.icon;
-              const isEven = i % 2 === 0; // 0, 2: Card BELOW node. 1, 3: Card ABOVE node.
-              const isHovered = hoveredIndex === i;
+              const isActive = activeIndex === idx;
 
               return (
                 <div
-                  key={step.number}
-                  className="flex flex-col items-center justify-between h-[740px] py-2"
-                  onMouseEnter={() => setHoveredIndex(i)}
-                  onMouseLeave={() => setHoveredIndex(null)}
+                  key={step.title}
+                  className="flex flex-col items-center cursor-pointer group"
+                  onMouseEnter={() => {
+                    setIsPaused(true);
+                    setActiveIndex(idx);
+                  }}
+                  onMouseLeave={() => {
+                    setIsPaused(false);
+                  }}
+                  onClick={() => setActiveIndex(idx)}
                 >
-                  {/* UPPER SLOT: Card (steps 1, 3) or breathing space (steps 0, 2) */}
-                  <div className="w-full flex items-start justify-center h-[280px]">
-                    {!isEven ? (
-                      <article
-                        tabIndex={0}
-                        aria-label={`${step.number}: ${step.title}`}
-                        onFocus={() => setHoveredIndex(i)}
-                        onBlur={() => setHoveredIndex(null)}
-                        className={`journey-step-card w-full max-w-[285px] h-[270px] group ${
-                          isHovered ? "active-journey-card" : ""
-                        }`}
-                      >
-                        <div className="journey-card-body">
-                          <div className="discipline-tag mb-2.5 flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                              <span
-                                className={`discipline-tag-circle ${
-                                  isHovered ? "scale-125" : ""
-                                }`}
-                              />
-                              <span className="font-mono text-xs font-semibold">
-                                {step.number}
-                              </span>
-                            </div>
-                            <span className="journey-badge font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full">
-                              {step.badge}
-                            </span>
-                          </div>
-                          <h3 className="journey-title text-[18px] font-bold leading-snug mb-1.5">
-                            {step.title}
-                          </h3>
-                          <p className="journey-desc text-[12.5px] leading-relaxed text-theme-muted">
-                            {step.description}
-                          </p>
-                        </div>
-                        <div className="journey-card-bottom mt-auto pt-3">
-                          <div className="capability-pills mb-3 flex flex-wrap gap-1.5">
-                            {step.pills.map((pill) => (
-                              <span key={pill} className="capability-pill">
-                                {pill}
-                              </span>
-                            ))}
-                          </div>
-                          <div className="capability-footer pt-2.5 border-t border-theme-border/60 flex items-center justify-between">
-                            <span className="text-xs font-semibold">
-                              {step.footer}
-                            </span>
-                            <div className="capability-btn">
-                              <ArrowRight size={13} />
-                            </div>
-                          </div>
-                        </div>
-                      </article>
+                  {/* Top Text Slot (Step 2 and Step 4) */}
+                  <div className="h-[92px] flex flex-col justify-end items-center text-center px-2 pb-2">
+                    {isTopArc ? (
+                      <div className="max-w-[240px]">
+                        <h3
+                          className={`font-bold text-base lg:text-lg mb-1 transition-colors duration-200 ${
+                            isActive ? "text-theme-accent" : "text-theme-text"
+                          }`}
+                        >
+                          {step.title}
+                        </h3>
+                        <p className="text-xs text-theme-muted leading-relaxed">
+                          {step.description}
+                        </p>
+                      </div>
                     ) : (
-                      <div className="h-full w-full" />
+                      <div className="h-full" aria-hidden="true" />
                     )}
                   </div>
 
-                  {/* CENTER SLOT: Circular Icon Node */}
-                  <div
-                    ref={(el) => {
-                      nodeRefs.current[i] = el;
-                    }}
-                    tabIndex={0}
-                    role="button"
-                    aria-label={`Node ${step.number}: ${step.title}`}
-                    onFocus={() => setHoveredIndex(i)}
-                    onBlur={() => setHoveredIndex(null)}
-                    className="relative my-auto cursor-pointer focus:outline-none"
-                  >
+                  {/* Center Node Slot: Large White Circle with Icon */}
+                  <div className="h-[130px] flex items-center justify-center relative my-1">
                     <div
-                      className={`relative w-[78px] h-[78px] rounded-full flex items-center justify-center transition-all duration-300 ease-out bg-theme-surface border ${
-                        isHovered
-                          ? "border-theme-accent scale-110 shadow-xl shadow-orange-500/20"
-                          : "border-theme-border shadow-md"
+                      ref={(el) => {
+                        circleRefs.current[idx] = el;
+                      }}
+                      className={`w-24 h-24 lg:w-28 lg:h-28 rounded-full bg-theme-surface border shadow-lg flex items-center justify-center transition-all duration-300 relative z-10 ${
+                        isActive
+                          ? "scale-105 shadow-xl shadow-orange-500/15 border-[#C84B15] ring-2 ring-[#C84B15]/25"
+                          : "border-theme-border/80 hover:border-theme-border"
                       }`}
                     >
-                      {/* Step Number Dot indicator */}
-                      <span
-                        className={`absolute -top-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-mono font-bold transition-all duration-300 ${
-                          isHovered
-                            ? "bg-theme-accent text-white scale-110 shadow-sm"
-                            : "bg-theme-bg text-theme-muted border border-theme-border"
-                        }`}
-                      >
-                        0{i + 1}
-                      </span>
-
-                      {/* Icon */}
                       <Icon
-                        size={28}
-                        weight={isHovered ? "bold" : "regular"}
+                        size={36}
+                        weight={isActive ? "bold" : "regular"}
                         className={`transition-all duration-300 ${
-                          isHovered
-                            ? "text-theme-accent scale-110"
-                            : "text-theme-text"
+                          isActive ? "text-theme-accent scale-110" : "text-theme-text"
                         }`}
                       />
                     </div>
                   </div>
 
-                  {/* LOWER SLOT: Card (steps 0, 2) or breathing space (steps 1, 3) */}
-                  <div className="w-full flex items-end justify-center h-[280px]">
-                    {isEven ? (
-                      <article
-                        tabIndex={0}
-                        aria-label={`${step.number}: ${step.title}`}
-                        onFocus={() => setHoveredIndex(i)}
-                        onBlur={() => setHoveredIndex(null)}
-                        className={`journey-step-card w-full max-w-[285px] h-[270px] group ${
-                          isHovered ? "active-journey-card" : ""
-                        }`}
-                      >
-                        <div className="journey-card-body">
-                          <div className="discipline-tag mb-2.5 flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                              <span
-                                className={`discipline-tag-circle ${
-                                  isHovered ? "scale-125" : ""
-                                }`}
-                              />
-                              <span className="font-mono text-xs font-semibold">
-                                {step.number}
-                              </span>
-                            </div>
-                            <span className="journey-badge font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full">
-                              {step.badge}
-                            </span>
-                          </div>
-                          <h3 className="journey-title text-[18px] font-bold leading-snug mb-1.5">
-                            {step.title}
-                          </h3>
-                          <p className="journey-desc text-[12.5px] leading-relaxed text-theme-muted">
-                            {step.description}
-                          </p>
-                        </div>
-                        <div className="journey-card-bottom mt-auto pt-3">
-                          <div className="capability-pills mb-3 flex flex-wrap gap-1.5">
-                            {step.pills.map((pill) => (
-                              <span key={pill} className="capability-pill">
-                                {pill}
-                              </span>
-                            ))}
-                          </div>
-                          <div className="capability-footer pt-2.5 border-t border-theme-border/60 flex items-center justify-between">
-                            <span className="text-xs font-semibold">
-                              {step.footer}
-                            </span>
-                            <div className="capability-btn">
-                              <ArrowRight size={13} />
-                            </div>
-                          </div>
-                        </div>
-                      </article>
+                  {/* Bottom Text Slot (Step 1 and Step 3) */}
+                  <div className="h-[92px] flex flex-col justify-start items-center text-center px-2 pt-2">
+                    {!isTopArc ? (
+                      <div className="max-w-[240px]">
+                        <h3
+                          className={`font-bold text-base lg:text-lg mb-1 transition-colors duration-200 ${
+                            isActive ? "text-theme-accent" : "text-theme-text"
+                          }`}
+                        >
+                          {step.title}
+                        </h3>
+                        <p className="text-xs text-theme-muted leading-relaxed">
+                          {step.description}
+                        </p>
+                      </div>
                     ) : (
-                      <div className="h-full w-full" />
+                      <div className="h-full" aria-hidden="true" />
                     )}
                   </div>
                 </div>
@@ -559,221 +355,71 @@ export function DeliveryMethodology() {
           </div>
         </div>
 
-        {/* ================================================================= */}
-        {/* MOBILE & TABLET LAYOUT: Vertical Timeline (< 1024px)              */}
-        {/* ================================================================= */}
-        <div className="block lg:hidden relative mt-8">
-          <div className="relative pl-6 sm:pl-10 space-y-8 sm:space-y-10">
-            {/* Continuous Vertical Connecting Spine Line */}
-            <div
-              className="absolute left-[33px] sm:left-[45px] top-6 bottom-6 w-[2px] bg-gradient-to-b from-theme-accent/60 via-theme-border to-theme-accent/80 -translate-x-1/2"
-              aria-hidden="true"
-            />
+        {/* Mobile & Tablet Layout (Visible on < lg: screens) */}
+        <div className="lg:hidden flex flex-col gap-5 max-w-lg mx-auto">
+          {STEPS.map((step, idx) => {
+            const Icon = step.icon;
+            const isActive = activeIndex === idx;
+            const isLast = idx === STEPS.length - 1;
 
-            {STEPS.map((step, i) => {
-              const Icon = step.icon;
-              const isHovered = hoveredIndex === i;
-
-              return (
+            return (
+              <div key={step.title} className="flex flex-col items-center">
                 <div
-                  key={step.number}
-                  className="relative flex items-start gap-4 sm:gap-6 group"
-                  onMouseEnter={() => setHoveredIndex(i)}
-                  onMouseLeave={() => setHoveredIndex(null)}
+                  className={`flex items-center gap-4 w-full p-4 rounded-2xl bg-theme-surface border transition-all duration-200 cursor-pointer ${
+                    isActive
+                      ? "border-[#C84B15] shadow-md shadow-orange-500/10 ring-1 ring-[#C84B15]/30"
+                      : "border-theme-border/70"
+                  }`}
+                  onMouseEnter={() => {
+                    setIsPaused(true);
+                    setActiveIndex(idx);
+                  }}
+                  onMouseLeave={() => {
+                    setIsPaused(false);
+                  }}
+                  onClick={() => setActiveIndex(idx)}
                 >
-                  {/* Vertical Node Indicator */}
-                  <div className="relative z-10 flex-shrink-0 pt-2">
-                    <div
-                      className={`w-[52px] h-[52px] sm:w-[62px] sm:h-[62px] rounded-full flex items-center justify-center bg-theme-surface border transition-all duration-300 ${
-                        isHovered
-                          ? "border-theme-accent scale-105 shadow-lg shadow-orange-500/20"
-                          : "border-theme-border shadow-sm"
-                      }`}
-                    >
-                      <Icon
-                        size={22}
-                        weight={isHovered ? "bold" : "regular"}
-                        className={`transition-colors duration-200 ${
-                          isHovered
-                            ? "text-theme-accent"
-                            : "text-theme-text"
-                        }`}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Step Content Card */}
-                  <article
-                    className={`journey-step-card flex-1 min-h-[250px] transition-all duration-300 ${
-                      isHovered ? "active-journey-card" : ""
+                  {/* Circle Icon */}
+                  <div
+                    className={`w-16 h-16 rounded-full bg-theme-bg border shadow-sm flex-shrink-0 flex items-center justify-center transition-all duration-300 ${
+                      isActive
+                        ? "border-[#C84B15] ring-2 ring-[#C84B15]/20"
+                        : "border-theme-border/80"
                     }`}
                   >
-                    <div>
-                      <div className="discipline-tag mb-3 flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <span className="discipline-tag-circle" />
-                          <span className="font-mono text-xs font-semibold">
-                            {step.number}
-                          </span>
-                        </div>
-                        <span className="journey-badge font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full">
-                          {step.badge}
-                        </span>
-                      </div>
-                      <h3 className="journey-title text-lg sm:text-xl font-bold mb-2">
-                        {step.title}
-                      </h3>
-                      <p className="journey-desc text-xs sm:text-sm leading-relaxed mb-4 text-theme-muted">
-                        {step.description}
-                      </p>
-                    </div>
-                    <div className="mt-auto">
-                      <div className="capability-pills mb-4 flex flex-wrap gap-1.5">
-                        {step.pills.map((pill) => (
-                          <span key={pill} className="capability-pill">
-                            {pill}
-                          </span>
-                        ))}
-                      </div>
-                      <div className="capability-footer pt-3 border-t border-theme-border/60 flex items-center justify-between">
-                        <span className="text-xs font-semibold">{step.footer}</span>
-                        <div className="capability-btn">
-                          <ArrowRight size={13} />
-                        </div>
-                      </div>
-                    </div>
-                  </article>
+                    <Icon
+                      size={30}
+                      weight={isActive ? "bold" : "regular"}
+                      className={`transition-colors duration-200 ${
+                        isActive ? "text-theme-accent scale-105" : "text-theme-text"
+                      }`}
+                    />
+                  </div>
+
+                  {/* Text Details */}
+                  <div className="flex-1 min-w-0">
+                    <h3
+                      className={`font-bold text-base mb-1 transition-colors duration-200 ${
+                        isActive ? "text-theme-accent" : "text-theme-text"
+                      }`}
+                    >
+                      {step.title}
+                    </h3>
+                    <p className="text-xs text-theme-muted leading-relaxed">
+                      {step.description}
+                    </p>
+                  </div>
                 </div>
-              );
-            })}
-          </div>
+
+                {/* Connector Line between Steps on Mobile */}
+                {!isLast && (
+                  <div className="w-0.5 h-6 border-l-2 border-dashed border-theme-border my-1" />
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
-
-      {/* Scoped CSS styles matching the OJIX Design Language */}
-      <style jsx>{`
-        @keyframes dashFlow {
-          from {
-            stroke-dashoffset: 0;
-          }
-          to {
-            stroke-dashoffset: -24;
-          }
-        }
-
-        .journey-step-card {
-          background-color: var(--surface, #ffffff);
-          border: 1px solid rgba(15, 28, 47, 0.12);
-          border-radius: 20px;
-          padding: 22px 20px 18px;
-          display: flex;
-          flex-direction: column;
-          justify-content: space-between;
-          overflow: hidden;
-          box-shadow: 0 4px 24px -2px rgba(15, 28, 47, 0.04);
-          transition: background-color 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-                      border-color 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-                      transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-                      box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-          cursor: pointer;
-          box-sizing: border-box;
-        }
-
-        :global(html[data-theme="dark"]) .journey-step-card {
-          background-color: #0d1420;
-          border-color: #1a273b;
-        }
-
-        .journey-badge {
-          background-color: var(--hover, #f0ebe4);
-          border: 1px solid var(--border, #e2dad0);
-          color: var(--muted, #5a687c);
-        }
-
-        :global(html[data-theme="dark"]) .journey-badge {
-          background-color: #172338;
-          border-color: #24354f;
-          color: #a5b0c2;
-        }
-
-        .journey-title {
-          color: var(--text, #0f1c2f);
-          transition: color 0.35s ease;
-        }
-
-        :global(html[data-theme="dark"]) .journey-title {
-          color: #f8fafc;
-        }
-
-        .journey-desc {
-          transition: color 0.35s ease;
-        }
-
-        /* Coordinated Card Hover State matching OJIX Signature Midnight Card */
-        :global(.active-journey-card) {
-          background-color: #0f1c2f !important;
-          border-color: #0f1c2f !important;
-          transform: translateY(-4px);
-          box-shadow: 0 25px 50px -12px rgba(15, 28, 47, 0.35) !important;
-        }
-
-        :global(.active-journey-card .discipline-tag) {
-          color: #ffffff !important;
-        }
-
-        :global(.active-journey-card .journey-badge) {
-          background-color: rgba(255, 255, 255, 0.12) !important;
-          border-color: rgba(255, 255, 255, 0.2) !important;
-          color: #f1f5f9 !important;
-        }
-
-        :global(.active-journey-card .journey-title) {
-          color: #ffffff !important;
-        }
-
-        :global(.active-journey-card .journey-desc) {
-          color: #cbd5e1 !important;
-        }
-
-        :global(.active-journey-card .capability-pill) {
-          background: rgba(255, 255, 255, 0.1) !important;
-          color: #f1f5f9 !important;
-          border-color: rgba(255, 255, 255, 0.18) !important;
-        }
-
-        :global(.active-journey-card .capability-footer) {
-          border-top-color: rgba(255, 255, 255, 0.15) !important;
-        }
-
-        :global(.active-journey-card .capability-footer span) {
-          color: var(--accent-color, #c9662f) !important;
-        }
-
-        :global(.active-journey-card .capability-btn) {
-          background: var(--accent-color, #c9662f) !important;
-          border-color: var(--accent-color, #c9662f) !important;
-          color: #ffffff !important;
-          transform: scale(1.06);
-          box-shadow: 0 4px 12px rgba(201, 102, 47, 0.4);
-        }
-
-        :global(html[data-theme="dark"] .active-journey-card) {
-          background-color: #070b12 !important;
-          border-color: rgba(201, 102, 47, 0.5) !important;
-          box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.75), 0 0 25px rgba(201, 102, 47, 0.2) !important;
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-          .journey-step-card,
-          :global(.active-journey-card) {
-            transform: none !important;
-            transition: none !important;
-          }
-          path {
-            animation: none !important;
-          }
-        }
-      `}</style>
     </section>
   );
 }

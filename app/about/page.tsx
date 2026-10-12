@@ -98,7 +98,7 @@ export default function About() {
   return (
     <>
       {/* Hero Section */}
-      <section className="pt-32 pb-20 md:pt-44 md:pb-28 px-6 bg-theme-bg relative overflow-hidden theme-transition border-b border-theme-border">
+      <section className="pt-6 lg:pt-10 pb-12 lg:pb-16 px-6 bg-theme-bg relative overflow-hidden theme-transition border-b border-theme-border">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-gradient-to-b from-orange-500/5 via-transparent to-transparent pointer-events-none rounded-full blur-3xl -z-10" />
         <div className="max-w-7xl mx-auto">
           <div className="max-w-3xl hero-reveal">
@@ -131,9 +131,9 @@ export default function About() {
       </section>
 
       {/* Origin & Comparison Section */}
-      <section className="py-24 md:py-32 px-6 bg-theme-surface/30 theme-transition border-b border-theme-border">
+      <section className="py-12 lg:py-16 px-6 bg-theme-surface/30 theme-transition border-b border-theme-border">
         <div className="max-w-7xl mx-auto">
-          <div className="mb-16 reveal">
+          <div className="mb-8 lg:mb-10 reveal">
             <span className="font-mono text-xs font-semibold uppercase tracking-widest text-theme-accent mb-4 block">
               THE STUDIO ORIGIN
             </span>
@@ -209,9 +209,9 @@ export default function About() {
       </section>
 
       {/* Manifesto / Principles Section */}
-      <section id="manifesto" className="py-24 md:py-32 px-6 bg-theme-bg theme-transition border-b border-theme-border">
+      <section id="manifesto" className="py-12 lg:py-16 px-6 bg-theme-bg theme-transition border-b border-theme-border">
         <div className="max-w-7xl mx-auto">
-          <div className="mb-16 reveal">
+          <div className="mb-8 lg:mb-10 reveal">
             <span className="font-mono text-xs font-semibold uppercase tracking-widest text-theme-accent mb-4 block">
               OUR MANIFESTO
             </span>
@@ -275,9 +275,9 @@ export default function About() {
       </section>
 
       {/* Partnership Models Section */}
-      <section className="py-24 md:py-32 px-6 bg-theme-surface/30 theme-transition border-b border-theme-border">
+      <section className="py-12 lg:py-16 px-6 bg-theme-surface/30 theme-transition border-b border-theme-border">
         <div className="max-w-7xl mx-auto">
-          <div className="mb-16 reveal">
+          <div className="mb-8 lg:mb-10 reveal">
             <span className="font-mono text-xs font-semibold uppercase tracking-widest text-theme-accent mb-4 block">
               ENGAGEMENT MODELS
             </span>
@@ -336,9 +336,9 @@ export default function About() {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-24 md:py-32 px-6 bg-theme-bg theme-transition border-b border-theme-border">
+      <section className="py-12 lg:py-16 px-6 bg-theme-bg theme-transition border-b border-theme-border">
         <div className="max-w-4xl mx-auto">
-          <div className="mb-14 text-center reveal">
+          <div className="mb-8 lg:mb-10 text-center reveal">
             <span className="font-mono text-xs font-semibold uppercase tracking-widest text-theme-accent mb-4 block">
               05 / TRANSPARENCY
             </span>
@@ -372,7 +372,7 @@ export default function About() {
       </section>
 
       {/* Bottom CTA Banner */}
-      <section className="py-24 md:py-32 px-6 bg-theme-surface/30 theme-transition">
+      <section className="py-12 lg:py-16 px-6 bg-theme-surface/30 theme-transition">
         <div className="max-w-5xl mx-auto bg-theme-surface border-2 border-theme-border rounded-3xl p-10 md:p-16 text-center shadow-soft relative overflow-hidden">
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl -z-10" />
           <span className="font-mono text-xs font-semibold uppercase tracking-widest text-theme-accent mb-4 block">

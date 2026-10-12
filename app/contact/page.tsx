@@ -9,7 +9,7 @@ export const metadata = {
 
 export default function Contact() {
   return (
-    <div className="pt-32 pb-24 md:pt-44 md:pb-32 px-6 bg-theme-bg relative overflow-hidden theme-transition min-h-screen">
+    <div className="pt-6 lg:pt-10 pb-12 lg:pb-16 px-6 bg-theme-bg relative overflow-hidden theme-transition">
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-gradient-to-b from-orange-500/5 via-transparent to-transparent pointer-events-none rounded-full blur-3xl -z-10" />
       <div className="max-w-7xl mx-auto">
         <Link
