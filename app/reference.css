@@ -1786,14 +1786,16 @@
         /* Mega Menu Dropdown Container */
         .mega-menu-panel {
             position: fixed;
-            top: 74px;
+            top: 72px;
             left: 50%;
-            transform: translateX(-50%) translateY(-10px);
+            transform: translateX(-50%) translateY(-6px);
             width: calc(100vw - 32px);
             max-width: 1060px;
             background: #ffffff;
-            border-radius: 24px;
-            box-shadow: 0 25px 60px -15px rgba(15, 28, 47, 0.22), 0 0 0 1px rgba(15, 28, 47, 0.08);
+            border-radius: 0 0 24px 24px;
+            border: 1px solid var(--border-color);
+            border-top: none;
+            box-shadow: 0 30px 60px -15px rgba(15, 28, 47, 0.22);
             overflow: hidden;
             opacity: 0;
             visibility: hidden;
@@ -1807,10 +1809,10 @@
         .mega-menu-panel::before {
             content: '';
             position: absolute;
-            top: -20px;
+            top: -16px;
             left: 0;
             right: 0;
-            height: 20px;
+            height: 16px;
         }
 
         /* Controlled menu activation via React state */
@@ -1823,7 +1825,9 @@
 
         html[data-theme="dark"] .mega-menu-panel {
             background: #090f1a;
-            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.1);
+            border-top: none;
+            box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.85);
         }
 
         /* Left Sidebars — Authentic OJIX Midnight Navy (#0f1c2f) */

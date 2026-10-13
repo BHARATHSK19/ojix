@@ -21,15 +21,41 @@ export default function Home() {
     return <>
         <section className="pt-6 lg:pt-10 pb-12 lg:pb-16 px-6 overflow-hidden">
             <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
-                <div className="lg:col-span-6 xl:col-span-7 text-left hero-reveal"><h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-extrabold tracking-tight leading-[1.06] mb-6 text-theme-text theme-transition">Software that ships.<br /><span className="opacity-40">Code that scales.</span><br /><span className="text-theme-accent">AI that works.</span></h1><p className="text-base sm:text-lg text-theme-muted max-w-xl leading-relaxed mb-8 theme-transition">We design, build, and run production software for companies that need more than a prototype.</p><div className="flex flex-wrap items-center gap-4"><Link href="/contact" className="inline-flex items-center gap-2 bg-theme-text text-theme-surface px-7 py-3.5 rounded-xl font-bold hover:bg-theme-accent hover:text-white transition-colors shadow-sm">Get in touch <ArrowUpRight size={18} /></Link><Link href="#what-we-build" className="inline-flex items-center gap-2 bg-transparent border-2 border-theme-border text-theme-text px-7 py-3.5 rounded-xl font-bold hover:border-theme-text theme-transition">Explore our work</Link></div></div>
-                <div className="lg:col-span-6 xl:col-span-5 flex justify-center items-center hero-reveal delay-100"><HeroShowcase /></div>
+                <div className="lg:col-span-6 xl:col-span-7 text-left hero-reveal">
+                    <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-extrabold tracking-tight leading-[1.06] mb-6 text-theme-text theme-transition">
+                        Software that ships.<br />
+                        <span className="opacity-40">Code that scales.</span><br />
+                        <span className="text-theme-accent">AI that works.</span>
+                    </h1>
+                    <p className="text-base sm:text-lg text-theme-muted max-w-xl leading-relaxed mb-8 theme-transition">
+                        We design, build, and run production software for companies that need more than a prototype.
+                    </p>
+                    <div className="flex flex-wrap items-center gap-4">
+                        <Link
+                            href="/contact"
+                            className="group inline-flex items-center gap-2 bg-theme-text text-theme-surface px-7 py-3.5 rounded-xl font-bold hover:bg-theme-accent hover:text-white transition-all duration-200 shadow-sm hover:shadow-[0_0_20px_rgba(249,115,22,0.3)]"
+                        >
+                            Get in touch
+                            <ArrowUpRight size={18} className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                        </Link>
+                        <Link
+                            href="#what-we-build"
+                            className="inline-flex items-center gap-2 bg-transparent border-2 border-theme-border text-theme-text px-7 py-3.5 rounded-xl font-bold hover:border-theme-text theme-transition"
+                        >
+                            Explore our work
+                        </Link>
+                    </div>
+                </div>
+                <div className="lg:col-span-6 xl:col-span-5 flex justify-center items-center hero-reveal delay-100">
+                    <HeroShowcase />
+                </div>
             </div>
         </section>
 
         <section className="py-12 lg:py-16 border-y border-theme-border bg-theme-surface/30 theme-transition overflow-hidden">
             <div className="max-w-7xl mx-auto px-6">
                 <div className="text-center mb-10">
-                    <p className="font-mono text-xs uppercase tracking-widest text-theme-muted">Trusted by ambitious teams</p>
+                    <p className="font-mono text-xs font-semibold uppercase tracking-widest text-theme-accent mb-4 block">Our Clients</p>
                 </div>
                 <div className="logoloop logoloop--fade" role="region" aria-label="Partner clients">
                     <div className="logoloop__track">
@@ -74,7 +100,51 @@ export default function Home() {
 
         <StudioIntro />
 
-        <section id="what-we-build" className="py-12 lg:py-16 px-6 bg-theme-bg relative overflow-hidden theme-transition border-b border-theme-border"><div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-gradient-to-b from-orange-500/5 via-transparent to-transparent pointer-events-none rounded-full blur-3xl -z-10" /><div className="max-w-7xl mx-auto"><div className="mb-8 lg:mb-10 reveal"><span className="font-mono text-xs font-semibold uppercase tracking-widest text-theme-accent mb-4 block">WHAT WE BUILD</span><h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight theme-transition leading-[1.15] mb-6">Six disciplines. Everything custom for your business.</h2><p className="text-base md:text-lg text-theme-muted max-w-3xl leading-relaxed theme-transition">The dedicated engineers who design and architect your software write the code and run the servers — zero outsourced handoffs, zero middlemen, zero finger-pointing.</p></div><div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">{services.map((service, i) => <Link href={`/services/${service.slug}`} key={service.slug} className={`discipline-card group reveal delay-${i % 3 === 0 ? "100" : i % 3 === 1 ? "200" : "300"}`}><div className="discipline-tag"><span className="discipline-tag-circle" /><span>{service.name}</span></div><div className="discipline-content"><h3 className="discipline-title">{["Custom Web & Mobile Apps", "Practical AI & Automation", "Bulletproof Cloud Hosting", "Live Sync & Connectors", "Clean Data & Live Dashboards", "Technical Advisory"][i]}</h3><p className="discipline-desc">{service.intro}</p></div><div className="discipline-capsule"><Image src={service.image || `/services/${service.slug}.jpg`} alt={service.name} fill sizes="(max-width: 768px) 90vw, 32vw" className="capsule-photo" /><div className="capsule-scrim" /><div className="capsule-track-line" /><span className="capsule-text">View service</span><div className="capsule-arrow-circle"><ArrowRight size={16} /></div></div></Link>)}</div></div></section>
+        <section id="what-we-build" className="py-12 lg:py-16 px-6 bg-theme-bg relative overflow-hidden theme-transition border-b border-theme-border">
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-gradient-to-b from-orange-500/5 via-transparent to-transparent pointer-events-none rounded-full blur-3xl -z-10" />
+            <div className="max-w-7xl mx-auto">
+                <div className="mb-8 lg:mb-10 reveal">
+                    <span className="font-mono text-xs font-semibold uppercase tracking-widest text-theme-accent mb-4 block">WHAT WE BUILD</span>
+                    <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight theme-transition leading-[1.15] mb-6">Six disciplines. Everything custom for your business.</h2>
+                    <p className="text-base md:text-lg text-theme-muted max-w-3xl leading-relaxed theme-transition">The dedicated engineers who design and architect your software write the code and run the servers — zero outsourced handoffs, zero middlemen, zero finger-pointing.</p>
+                </div>
+                <div className="flex flex-wrap justify-center gap-6">
+                    {services.map((service, i) => (
+                        <Link
+                            href={`/services/${service.slug}`}
+                            key={service.slug}
+                            className={`discipline-card group reveal delay-${i % 4 === 0 ? "100" : i % 4 === 1 ? "200" : i % 4 === 2 ? "300" : "400"} w-full md:w-[calc(50%-0.75rem)] lg:w-[calc(25%-1.125rem)]`}
+                        >
+                            <div className="discipline-tag">
+                                <span className="discipline-tag-circle" />
+                                <span>{service.name}</span>
+                            </div>
+                            <div className="discipline-content">
+                                <h3 className="discipline-title">
+                                    {["Custom Web & Mobile Apps", "Practical AI & Automation", "Bulletproof Cloud Hosting", "Live Sync & Connectors", "Clean Data & Live Dashboards", "Technical Advisory"][i]}
+                                </h3>
+                                <p className="discipline-desc">{service.intro}</p>
+                            </div>
+                            <div className="discipline-capsule">
+                                <Image
+                                    src={service.image || `/services/${service.slug}.jpg`}
+                                    alt={service.name}
+                                    fill
+                                    sizes="(max-width: 768px) 90vw, (max-width: 1200px) 50vw, 25vw"
+                                    className="capsule-photo"
+                                />
+                                <div className="capsule-scrim" />
+                                <div className="capsule-track-line" />
+                                <span className="capsule-text">View service</span>
+                                <div className="capsule-arrow-circle">
+                                    <ArrowRight size={16} />
+                                </div>
+                            </div>
+                        </Link>
+                    ))}
+                </div>
+            </div>
+        </section>
 
         <WhyUsSection />
 

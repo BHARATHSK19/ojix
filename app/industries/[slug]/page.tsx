@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, ArrowUpRight, CheckCircle, ShieldCheck, Database, Cloud, Lock, ChartLineUp, HardDrives, Cpu } from "@phosphor-icons/react/dist/ssr";
@@ -63,36 +64,73 @@ export default async function IndustryPage({
       <section className="pt-6 lg:pt-10 pb-12 lg:pb-16 px-6 bg-theme-bg relative overflow-hidden theme-transition border-b border-theme-border">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-gradient-to-b from-orange-500/5 via-transparent to-transparent pointer-events-none rounded-full blur-3xl -z-10" />
         <div className="max-w-7xl mx-auto">
-          <Link
-            href="/#work"
-            className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-theme-muted hover:text-theme-accent transition-colors mb-6"
-          >
-            <ArrowLeft size={14} /> Back to Industries
-          </Link>
-          <div className="max-w-3xl hero-reveal">
-            <span className="font-mono text-xs font-semibold uppercase tracking-widest text-theme-accent mb-4 block">
-              INDUSTRY FOCUS · {ind.name.toUpperCase()}
-            </span>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.08] mb-6 text-theme-text theme-transition">
-              {ind.name} systems<br />
-              <span className="text-theme-accent">built for the work.</span>
-            </h1>
-            <p className="text-base sm:text-lg text-theme-muted max-w-2xl leading-relaxed mb-8 theme-transition">
-              {ind.brief} We combine practical domain understanding with dedicated product engineering to make complex operational workflows clearer, faster, and more dependable.
-            </p>
-            <div className="flex flex-wrap items-center gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14 items-center">
+            {/* Left Column: Industry Text Content */}
+            <div className="lg:col-span-7 hero-reveal">
               <Link
-                href="/contact"
-                className="inline-flex items-center gap-2 bg-theme-text text-theme-surface px-7 py-3.5 rounded-xl font-bold hover:bg-theme-accent hover:text-white transition-colors shadow-sm"
+                href="/#work"
+                className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-theme-muted hover:text-theme-accent transition-colors mb-6"
               >
-                Talk through your use case <ArrowUpRight size={18} />
+                <ArrowLeft size={14} /> Back to Industries
               </Link>
-              <a
-                href="https://wa.me/919008877883"
-                className="inline-flex items-center gap-2 bg-transparent border-2 border-theme-border text-theme-text px-7 py-3.5 rounded-xl font-bold hover:border-theme-text theme-transition"
-              >
-                WhatsApp
-              </a>
+              <span className="font-mono text-xs font-semibold uppercase tracking-widest text-theme-accent mb-4 block">
+                INDUSTRY FOCUS · {ind.name.toUpperCase()}
+              </span>
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.08] mb-6 text-theme-text theme-transition">
+                {ind.name} systems<br />
+                <span className="text-theme-accent">built for the work.</span>
+              </h1>
+              <p className="text-base sm:text-lg text-theme-muted max-w-2xl leading-relaxed mb-8 theme-transition">
+                {ind.brief} We combine practical domain understanding with dedicated product engineering to make complex operational workflows clearer, faster, and more dependable.
+              </p>
+              <div className="flex flex-wrap items-center gap-4">
+                <Link
+                  href="/contact"
+                  className="inline-flex items-center gap-2 bg-theme-text text-theme-surface px-7 py-3.5 rounded-xl font-bold hover:bg-theme-accent hover:text-white transition-colors shadow-sm"
+                >
+                  Talk through your use case <ArrowUpRight size={18} />
+                </Link>
+
+              </div>
+            </div>
+
+            {/* Right Column: Sleek Framed Image Card with Glassmorphic Overlay */}
+            <div className="lg:col-span-5">
+              <div className="relative aspect-[4/3] lg:aspect-[5/4] w-full rounded-3xl overflow-hidden border border-theme-border shadow-xl bg-theme-surface group">
+                <Image
+                  src={`/industries/${ind.slug}.jpg`}
+                  alt={ind.name}
+                  fill
+                  priority
+                  quality={95}
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-cover object-center transition-transform duration-700 hover:scale-105"
+                />
+                {/* Subtle bottom dark gradient scrim */}
+                <div
+                  className="absolute inset-0 bg-gradient-to-t from-[#0B0F19]/85 via-[#0B0F19]/25 to-transparent pointer-events-none"
+                  aria-hidden="true"
+                />
+                {/* Clean glassmorphic overlay bar at the bottom */}
+                <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5 flex flex-col gap-2.5">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-theme-accent animate-pulse" />
+                    <span className="font-mono text-xs uppercase tracking-widest text-white/90 font-bold drop-shadow-sm">
+                      {ind.name}
+                    </span>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                    {["Custom Platforms", "Automation", "Secure Systems"].map((tag) => (
+                      <span
+                        key={tag}
+                        className="bg-white/10 backdrop-blur-md border border-white/15 text-white text-xs px-3 py-1 rounded-full font-mono font-medium shadow-sm"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

@@ -101,9 +101,15 @@ export function HeroShowcase() {
         <div className="hx-glow" aria-hidden="true" />
 
         {/* Main Interactive Browser / App Window */}
-        <div className="hx-win bg-theme-surface border border-theme-border shadow-2xl rounded-2xl overflow-hidden flex flex-col theme-transition">
-          {/* Top Window Bar with macOS Dots & Monospace Telemetry Label */}
-          <div className="px-3.5 py-2.5 bg-theme-bg/90 border-b border-theme-border/80 flex items-center justify-between gap-2 theme-transition">
+        <div className="hx-win bg-theme-surface border border-theme-border shadow-2xl rounded-2xl flex flex-col theme-transition !overflow-visible">
+          {/* Illustrative Capability Preview Badge overlapping top border */}
+          <div className="absolute -top-3 left-6 px-2.5 py-0.5 text-[10px] font-mono tracking-wider uppercase font-semibold text-orange-500 bg-slate-900 border border-orange-500/30 rounded-full shadow-md z-20 pointer-events-none">
+            CAPABILITY PREVIEW
+          </div>
+
+          <div className="rounded-2xl overflow-hidden flex flex-col flex-1">
+            {/* Top Window Bar with macOS Dots & Monospace Telemetry Label */}
+            <div className="px-3.5 py-2.5 bg-theme-bg/90 border-b border-theme-border/80 flex items-center justify-between gap-2 theme-transition">
             {/* macOS window control dots */}
             <div className="flex items-center gap-1.5 flex-shrink-0">
               <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f57] inline-block opacity-90" />
@@ -456,7 +462,8 @@ export function HeroShowcase() {
             )}
           </AnimatePresence>
         </div>
-      </div>
+          </div>
+        </div>
 
       {/* Floating Status Pill in Bottom-Left */}
       <div

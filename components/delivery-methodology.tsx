@@ -293,9 +293,8 @@ export function DeliveryMethodology() {
                     {isTopArc ? (
                       <div className="max-w-[240px]">
                         <h3
-                          className={`font-bold text-base lg:text-lg mb-1 transition-colors duration-200 ${
-                            isActive ? "text-theme-accent" : "text-theme-text"
-                          }`}
+                          className={`font-bold text-base lg:text-lg mb-1 transition-colors duration-200 ${isActive ? "text-theme-accent" : "text-theme-text"
+                            }`}
                         >
                           {step.title}
                         </h3>
@@ -314,18 +313,16 @@ export function DeliveryMethodology() {
                       ref={(el) => {
                         circleRefs.current[idx] = el;
                       }}
-                      className={`w-24 h-24 lg:w-28 lg:h-28 rounded-full bg-theme-surface border shadow-lg flex items-center justify-center transition-all duration-300 relative z-10 ${
-                        isActive
+                      className={`w-24 h-24 lg:w-28 lg:h-28 rounded-full bg-theme-surface border shadow-lg flex items-center justify-center transition-all duration-300 relative z-10 ${isActive
                           ? "scale-105 shadow-xl shadow-orange-500/15 border-[#C84B15] ring-2 ring-[#C84B15]/25"
                           : "border-theme-border/80 hover:border-theme-border"
-                      }`}
+                        }`}
                     >
                       <Icon
                         size={36}
                         weight={isActive ? "bold" : "regular"}
-                        className={`transition-all duration-300 ${
-                          isActive ? "text-theme-accent scale-110" : "text-theme-text"
-                        }`}
+                        className={`transition-all duration-300 ${isActive ? "text-theme-accent scale-110" : "text-theme-text"
+                          }`}
                       />
                     </div>
                   </div>
@@ -335,9 +332,8 @@ export function DeliveryMethodology() {
                     {!isTopArc ? (
                       <div className="max-w-[240px]">
                         <h3
-                          className={`font-bold text-base lg:text-lg mb-1 transition-colors duration-200 ${
-                            isActive ? "text-theme-accent" : "text-theme-text"
-                          }`}
+                          className={`font-bold text-base lg:text-lg mb-1 transition-colors duration-200 ${isActive ? "text-theme-accent" : "text-theme-text"
+                            }`}
                         >
                           {step.title}
                         </h3>
@@ -365,11 +361,10 @@ export function DeliveryMethodology() {
             return (
               <div key={step.title} className="flex flex-col items-center">
                 <div
-                  className={`flex items-center gap-4 w-full p-4 rounded-2xl bg-theme-surface border transition-all duration-200 cursor-pointer ${
-                    isActive
+                  className={`flex items-center gap-4 w-full p-4 rounded-2xl bg-theme-surface border transition-all duration-200 cursor-pointer ${isActive
                       ? "border-[#C84B15] shadow-md shadow-orange-500/10 ring-1 ring-[#C84B15]/30"
                       : "border-theme-border/70"
-                  }`}
+                    }`}
                   onMouseEnter={() => {
                     setIsPaused(true);
                     setActiveIndex(idx);
@@ -381,27 +376,24 @@ export function DeliveryMethodology() {
                 >
                   {/* Circle Icon */}
                   <div
-                    className={`w-16 h-16 rounded-full bg-theme-bg border shadow-sm flex-shrink-0 flex items-center justify-center transition-all duration-300 ${
-                      isActive
+                    className={`w-16 h-16 rounded-full bg-theme-bg border shadow-sm flex-shrink-0 flex items-center justify-center transition-all duration-300 ${isActive
                         ? "border-[#C84B15] ring-2 ring-[#C84B15]/20"
                         : "border-theme-border/80"
-                    }`}
+                      }`}
                   >
                     <Icon
                       size={30}
                       weight={isActive ? "bold" : "regular"}
-                      className={`transition-colors duration-200 ${
-                        isActive ? "text-theme-accent scale-105" : "text-theme-text"
-                      }`}
+                      className={`transition-colors duration-200 ${isActive ? "text-theme-accent scale-105" : "text-theme-text"
+                        }`}
                     />
                   </div>
 
                   {/* Text Details */}
                   <div className="flex-1 min-w-0">
                     <h3
-                      className={`font-bold text-base mb-1 transition-colors duration-200 ${
-                        isActive ? "text-theme-accent" : "text-theme-text"
-                      }`}
+                      className={`font-bold text-base mb-1 transition-colors duration-200 ${isActive ? "text-theme-accent" : "text-theme-text"
+                        }`}
                     >
                       {step.title}
                     </h3>
