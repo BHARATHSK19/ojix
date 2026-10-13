@@ -23,7 +23,7 @@ const previewImages={services:["photo-1522071820081-009f0129c71c","photo-1618005
 export function SiteShell({children}:{children:React.ReactNode}){
  const pathname=usePathname();
  const isHome=pathname==="/"||pathname==="";
- const [open,setOpen]=useState<MenuName|null>(null),[mobile,setMobile]=useState(false),[industryIndex,setIndustryIndex]=useState(0),[productIndex,setProductIndex]=useState(0),[serviceIndex,setServiceIndex]=useState(0),[scrolled,setScrolled]=useState(false),[dark,setDark]=useState(false),[contact,setContact]=useState(false);
+ const [open,setOpen]=useState<MenuName|null>(null),[mobile,setMobile]=useState(false),[industryIndex,setIndustryIndex]=useState(0),[productIndex,setProductIndex]=useState(0),[serviceIndex,setServiceIndex]=useState(0),[dark,setDark]=useState(false),[contact,setContact]=useState(false);
  const timer=useRef<ReturnType<typeof setTimeout>|null>(null);
 
  const close=()=>{if(timer.current)clearTimeout(timer.current);setOpen(null);setMobile(false);setContact(false)};
@@ -32,10 +32,8 @@ export function SiteShell({children}:{children:React.ReactNode}){
   let saved:string|null=null;try{saved=localStorage.getItem("ojix-theme")}catch{}
   const selected=saved||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");
   document.documentElement.dataset.theme=selected;
-  const onScroll=()=>setScrolled(window.scrollY>24);
-  const raf=requestAnimationFrame(()=>{setDark(selected==="dark");onScroll()});
-  window.addEventListener("scroll",onScroll,{passive:true});
-  return()=>{cancelAnimationFrame(raf);window.removeEventListener("scroll",onScroll)};
+  const raf=requestAnimationFrame(()=>{setDark(selected==="dark")});
+  return()=>{cancelAnimationFrame(raf)};
  },[]);
 
  useEffect(()=>{
@@ -109,7 +107,7 @@ export function SiteShell({children}:{children:React.ReactNode}){
  const navItems:{label:string;href?:string;menu?:MenuName}[]=[{label:"Home",href:"/"},{label:"Services",menu:"services"},{label:"Industries",menu:"industries"},{label:"Products",menu:"products"},{label:"About",href:"/about"}];
  const mobileLinks=[{label:"Home",href:"/",note:""},{label:"Services",href:"/#what-we-build",note:"Six disciplines"},{label:"Industries",href:"/#work",note:"Eight sectors"},{label:"Products",href:"/#products",note:"Four products"},{label:"About",href:"/about",note:""}];
  const menuState={services:[serviceIndex,setServiceIndex],industries:[industryIndex,setIndustryIndex],products:[productIndex,setProductIndex]} as const;
- return <><header id="site-header" className={`ox-header${scrolled?" is-scrolled":""}${mobile?" is-menu-open":""}`} onMouseLeave={hideSoon} onMouseEnter={()=>timer.current&&clearTimeout(timer.current)}>
+ return <><header id="site-header" className={`ox-header sticky top-0 left-0 w-full z-50 bg-theme-bg/95 backdrop-blur-md border-b border-theme-border${mobile?" is-menu-open":""}`} onMouseLeave={hideSoon} onMouseEnter={()=>timer.current&&clearTimeout(timer.current)}>
   <div className="ox-bar">
    <Link href="/" onClick={close} className="ox-brand" aria-label="OJIX — home"><Image priority className="theme-logo-light ox-logo" src="/ojix-logo-light.svg" width={755} height={380} alt="OJIX"/><Image priority className="theme-logo-dark ox-logo" src="/ojix-logo-dark.svg" width={755} height={380} alt="" aria-hidden="true"/></Link>
    <nav className="ox-nav" aria-label="Primary">
@@ -145,7 +143,7 @@ export function SiteShell({children}:{children:React.ReactNode}){
    <a href="mailto:info@ojix.in" className="ox-m-mail">info@ojix.in</a>
   </div>
  </div>
- <main className="pt-[72px]">{children}</main>
+ <main>{children}</main>
  <footer id="contact" className="bg-theme-surface border-t border-theme-border pt-16 pb-12 px-6 theme-transition">
   <div className="max-w-4xl mx-auto text-center reveal mb-12"><span className="font-mono text-xs font-semibold uppercase tracking-widest text-theme-accent mb-4 block">LET’S BUILD SOMETHING REAL</span><h2 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-6 theme-transition">Tell us what you want to build.</h2><p className="text-lg md:text-xl text-theme-muted font-medium leading-relaxed mb-8 max-w-3xl mx-auto theme-transition">An engineer replies directly. Get a technical perspective on your architecture, bottlenecks, and build roadmap with <strong className="text-theme-text font-bold">zero sales fluff</strong>.</p><div className="flex flex-col sm:flex-row justify-center items-center gap-4"><Link href="/contact" className="w-full sm:w-auto inline-flex justify-center items-center gap-2 bg-theme-text text-theme-surface px-8 py-4 rounded-xl font-bold hover:bg-theme-accent hover:text-white transition-colors">Start a project <ArrowRight size={16}/></Link><a href="mailto:info@ojix.in" className="w-full sm:w-auto inline-flex justify-center items-center gap-2 bg-theme-bg border border-theme-border text-theme-text px-8 py-4 rounded-xl font-bold hover:border-theme-accent transition-colors theme-transition">info@ojix.in</a></div></div>
   <div className="max-w-7xl mx-auto pt-16 border-t border-theme-border/60"><div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8"><div className="lg:col-span-4 pr-0 lg:pr-6 space-y-5"><Link href="/" onClick={close}><Image className="theme-logo-light h-9 sm:h-10 w-auto" src="/ojix-logo-light.svg" width={755} height={380} alt="OJIX"/><Image className="theme-logo-dark h-9 sm:h-10 w-auto" src="/ojix-logo-dark.svg" width={755} height={380} alt="OJIX"/></Link><p className="text-sm text-theme-muted leading-relaxed max-w-sm">Software product studio building custom platforms, AI systems, cloud infrastructure, and DevOps. Production-grade from day one.</p><div className="font-mono text-xs font-bold uppercase tracking-widest text-theme-accent">BENGALURU · INDIA</div></div><div className="lg:col-span-2"><h4 className="text-xs font-mono font-bold uppercase tracking-widest text-theme-accent mb-4">Explore</h4><ul className="space-y-2.5 text-sm"><li><Link href="/" className="text-theme-muted hover:text-theme-accent transition-colors font-medium">Home</Link></li><li><Link href="/#what-we-build" className="text-theme-muted hover:text-theme-accent transition-colors font-medium">What we build</Link></li><li><Link href="/#products" className="text-theme-muted hover:text-theme-accent transition-colors font-medium">Products</Link></li><li><Link href="/#work" className="text-theme-muted hover:text-theme-accent transition-colors font-medium">Industries</Link></li><li><Link href="/about" className="text-theme-muted hover:text-theme-accent transition-colors font-medium">About</Link></li></ul></div><div className="lg:col-span-3"><h4 className="text-xs font-mono font-bold uppercase tracking-widest text-theme-accent mb-4">Contact</h4><ul className="space-y-2.5 text-sm"><li><Link href="/contact" className="text-theme-muted hover:text-theme-accent">Start a project</Link></li><li><a href="tel:+919008877883" className="text-theme-muted hover:text-theme-accent">+91 90088 77883</a></li><li><a href="mailto:info@ojix.in" className="text-theme-muted hover:text-theme-accent">info@ojix.in</a></li></ul></div><div className="lg:col-span-3"><h4 className="text-xs font-mono font-bold uppercase tracking-widest text-theme-accent mb-4">Ownership</h4><p className="text-sm text-theme-muted">100% code ownership. Direct engineering access. Clear milestones and working demos.</p></div></div><div className="flex justify-between items-center gap-5 flex-wrap mt-16 pt-6 border-t border-theme-border/60 text-xs text-theme-muted"><span>© {new Date().getFullYear()} OJIX Studio · Built with intent. Not assembled.</span><div className="flex items-center gap-5"><Link href="/privacy" className="hover:text-theme-accent transition-colors">Privacy Policy</Link><span className="opacity-30">·</span><Link href="/terms" className="hover:text-theme-accent transition-colors">Terms of Service</Link></div></div></div>
